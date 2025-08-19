@@ -90,12 +90,12 @@ public class Login {
                     break;
                 case "Error 400: Invalid User ID or Password":
                     Assert.assertEquals("Error message for empty password is not correct",
-                            expectedMsg, baseUtil.getTosterMsg(errorTosterMessage).getText());
+                            expectedMsg, baseUtil.getToasterMsg(errorTosterMessage).getText());
                     break;
 
                 case "Logged in Successfully.":
                     Assert.assertEquals("Login success message is not correct",
-                            expectedMsg, baseUtil.getTosterMsg(successfulLoginTosterMesssage).getText());
+                            expectedMsg, baseUtil.getToasterMsg(successfulLoginTosterMesssage).getText());
                     commonMethod.clickOnButton("Logout");
                     break;
                 default:

@@ -61,6 +61,7 @@ public class TestBase {
                     commonMethod.enterText(driver.findElement(By.xpath(globPop.get("Director_username_xpath"))),globPop.get("directorLoginId"));
                     commonMethod.waitForVisibleElement(driver.findElement(By.xpath(globPop.get("Director_password_xpath"))));
                     commonMethod.enterText(driver.findElement(By.xpath(globPop.get("Director_password_xpath"))),globPop.get("directorPassword") );
+                    commonMethod.explicitWait(5000);
                     commonMethod.clickOnButton("Login");
                 }else {
                     getWebDriver().navigate().refresh();

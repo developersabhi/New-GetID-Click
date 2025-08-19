@@ -26,4 +26,8 @@ public class CommonStepDefinition {
     public void close_the_browser() {
         commonMethod.closeBrowser();
     }
+    @Given("User log in to provider URL and is already present at the website list page.")
+    public void user_log_in_to_provider_url_and_is_already_present_at_the_website_list_page() {
+        testBase.login();
+    }
 }

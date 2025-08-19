@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class BaseUtil {
- public WebElement getTosterMsg(WebElement element){
+ public WebElement getToasterMsg(WebElement element){
      WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofSeconds(5));
     return  wait.until(ExpectedConditions.visibilityOfElementLocated(
              By.cssSelector(".toast-message")));
