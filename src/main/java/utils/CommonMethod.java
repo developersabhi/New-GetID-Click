@@ -1,5 +1,6 @@
 package utils;
 
+import constants.PathConstants;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -10,7 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
@@ -22,15 +22,16 @@ import java.util.Properties;
 public class CommonMethod {
 
     private static final Logger logger = Logger.getLogger(CommonMethod.class);
-    WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofMillis(10000));
+    WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofMillis(PathConstants.defaultTimeout));
     private static final TestBase testbase = TestBase.getInstance();
 
     BaseUtil baseUtil = new BaseUtil();
+
     public CommonMethod() {
         PageFactory.initElements(TestBase.getWebDriver(), this);
     }
 
-    @FindBy (xpath = "//button[@type='submit']")
+    @FindBy(xpath = "//button[@type='submit']")
     WebElement loginBtn;
     @FindBy(xpath = "//i[@class='fas fa-sign-out-alt']/following::span[ contains(text(),'Logout')]")
     WebElement logoutBtn;
@@ -50,7 +51,7 @@ public class CommonMethod {
     WebElement statusToggleBtn;
     @FindBy(xpath = "//a[contains(text(),'Banks')]")
     WebElement banksBtn;
-    @FindBy(xpath ="//button[contains(text(),'Add Bank')]")
+    @FindBy(xpath = "//button[contains(text(),'Add Bank')]")
     WebElement addBankBtn;
     @FindBy(xpath = "//span[@class='current']")
     WebElement countryDropDownBtn;
@@ -78,7 +79,7 @@ public class CommonMethod {
     WebElement manageIdStatusChangeToasterMsg;
 
 
-    public void clearAndType( WebElement element, String value) {
+    public void clearAndType(WebElement element, String value) {
         Actions actions = new Actions(TestBase.getWebDriver());
         actions.click(element)
                 .keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL)
@@ -87,20 +88,20 @@ public class CommonMethod {
         element.sendKeys(value);
     }
 
-    public static Map<String, String> readPropertied(){
-        Map<String,String> all = new HashMap<>();
+    public static Map<String, String> readPropertied() {
+        Map<String, String> all = new HashMap<>();
         Properties properties = new Properties();
         try {
             logger.info("Read Properties Files ::");
-            InputStream inputStream = new FileInputStream(System.getProperty("user.dir")+"/src/main/resources/global.properties");
+            InputStream inputStream = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/global.properties");
             properties.load(inputStream);
             Enumeration<Object> keys = properties.keys();
-            while(keys.hasMoreElements()){
-                String key =(String) keys.nextElement();
+            while (keys.hasMoreElements()) {
+                String key = (String) keys.nextElement();
                 all.put(key, properties.getProperty(key));
             }
         } catch (IOException e) {
-            logger.error(" unable read properties file not read :: "+e.getMessage());
+            logger.error(" unable read properties file not read :: " + e.getMessage());
         }
         return all;
     }
@@ -116,27 +117,29 @@ public class CommonMethod {
     public void clickElement(WebElement element) {
         wait.until(ExpectedConditions.elementToBeClickable(element)).click();
     }
+
     public void clickElement(By locator) {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
         element.click();
     }
+
     public static TestBase getTestbase() {
         return new TestBase();
     }
 
-    public void waitForVisibleElement(WebElement element){
+    public void waitForVisibleElement(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
 
-    public boolean isElementPresent(WebElement element){
+    public boolean isElementPresent(WebElement element) {
         boolean flag = false;
         waitForVisibleElement(element);
         try {
-            if (element.isDisplayed()){
+            if (element.isDisplayed()) {
                 flag = true;
             }
-        } catch (Exception e){
-            logger.error("Element not display :: "+e.getMessage());
+        } catch (Exception e) {
+            logger.error("Element not display :: " + e.getMessage());
         }
         return flag;
     }
@@ -225,30 +228,29 @@ public class CommonMethod {
         }
     }
 
-
-    public void enterText(WebElement element,String text) {
-        try{
-            if(isElementPresent(element)) {
+    public void enterText(WebElement element, String text) {
+        try {
+            if (isElementPresent(element)) {
                 Actions actions = new Actions(TestBase.getWebDriver());
                 actions.click(element).keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL).
                         sendKeys(Keys.DELETE).perform();
                 element.sendKeys(text);
             }
-        }catch (Exception  e){
-            logger.error("Error doing enter the text :: "+e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error doing enter the text :: " + e.getMessage());
         }
     }
 
     public void closeBrowser() {
         try {
             TestBase.getWebDriver().quit();
-        }catch (Exception e){
-            logger. error("Unable to close the browser");
+        } catch (Exception e) {
+            logger.error("Unable to close the browser");
         }
     }
 
-    public void verifyToasterMsg(String action){
-        switch (action.toUpperCase()){
+    public void verifyToasterMsg(String action) {
+        switch (action.toUpperCase()) {
             case "ADD PAYMENT":
                 Assert.assertEquals("Error message for payment not added",
                         "Payment method added successfully.",
@@ -271,7 +273,7 @@ public class CommonMethod {
                 logger.info("Bank added successfully.");
                 break;
             case "CHANGE PASSWORD":
-                Assert.assertEquals("Error message for password not chnage","Password changed successfully",baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
+                Assert.assertEquals("Error message for password not chnage", "Password changed successfully", baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
                 logger.info(baseUtil.getToasterMsg(successfullyPasswordChangeMsg));
                 break;
             default:

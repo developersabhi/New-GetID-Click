@@ -1,5 +1,6 @@
 package com.automation.director.manageId;
 
+import constants.PathConstants;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -77,14 +78,6 @@ public class ManageId {
                 bankNameValue = value + " " + generateRandomString();
                 bankName.sendKeys(bankNameValue);
                 break;
-//            case "":
-//                break;
-//            case "":
-//                break;
-//            case "":
-//                break;
-//            case "":
-//                break;
             default:
                 logger.error("Unable to find the input field :: " + field);
         }
@@ -96,7 +89,7 @@ public class ManageId {
 
     public void uploadThePaymentIcon() {
         paymentIcon.sendKeys(System.getProperty("user.dir") + "/src/main/resources/QR.png");
-        commonMethod.explicitWait(1000);
+        commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
     }
 
     public void verifyAddPaymentMethod(String method){
@@ -107,7 +100,7 @@ public class ManageId {
                 commonMethod.isElementPresent(searchManageId);
                 searchManageId.sendKeys(methodNameValue);
                 searchManageId.sendKeys(Keys.ENTER);
-                commonMethod.explicitWait(1000);
+                commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
                 expected = methodNameValue;
                 actual = methodNameOnList.getText();
                 Assert.assertEquals("Payment Method Added :: ", expected, actual);
@@ -116,7 +109,7 @@ public class ManageId {
                 commonMethod.isElementPresent(searchManageId);
                 searchManageId.sendKeys(bankNameValue);
                 searchManageId.sendKeys(Keys.ENTER);
-                commonMethod.explicitWait(1000);
+                commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
                 expected = bankNameValue;
                 actual = bankNameOnList.getText();
                 Assert.assertEquals("Bank Method Added :: ", expected, actual);
