@@ -1,5 +1,6 @@
 package utils;
 
+import constants.PathConstants;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +17,7 @@ public class TestBase {
     private static final Logger logger = Logger.getLogger(TestBase.class);
     static protected WebDriver driver = null;
     private static TestBase instance;
-    Map<String,String> globPop = null;
+    public static Map<String,String> globPop = null;
     CommonMethod commonMethod = new CommonMethod();
 
     public  void init(){
@@ -61,7 +62,7 @@ public class TestBase {
                     commonMethod.enterText(driver.findElement(By.xpath(globPop.get("Director_username_xpath"))),globPop.get("directorLoginId"));
                     commonMethod.waitForVisibleElement(driver.findElement(By.xpath(globPop.get("Director_password_xpath"))));
                     commonMethod.enterText(driver.findElement(By.xpath(globPop.get("Director_password_xpath"))),globPop.get("directorPassword") );
-                    commonMethod.explicitWait(5000);
+                    commonMethod.explicitWait(PathConstants.WAIT_LOW);
                     commonMethod.clickOnButton("Login");
                 }else {
                     getWebDriver().navigate().refresh();

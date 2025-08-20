@@ -1,5 +1,6 @@
 package com.automation.director.manageId;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
 import utils.CommonMethod;
 
@@ -41,6 +42,17 @@ public class ManageIdTest {
     @Then("click on the {string} dropdown and choice the {string} country.")
     public void click_on_the_dropdown_and_choice_the_country(String value, String field) {
         manageId.selectCountryFromDropdown(value, field);
-//        manageId.clickAndSelectCountry(value, field);
     }
+
+    @Then("update the OTP Setting with value {string}.")
+    public void update_the_OTP_Setting_with_value(String value) {
+        manageId.updateOTP(value);
+    }
+
+    @After("@GetID_VerifyOTPSettings")
+    public void updateOriginalOTP(){
+        manageId.updateOldOTP();
+        commonMethod.clickOnButton("Save Otp");
+    }
+
 }

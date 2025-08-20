@@ -24,7 +24,7 @@ public class ManageId {
     }
     BaseUtil baseUtil = new BaseUtil();
 
-    static protected String methodNameValue, bankNameValue;
+    static protected String methodNameValue, bankNameValue, copyText;
 
     @FindBy(xpath = "//div/span[@class='current' and contains(text(),'Select Method Type')]")
     WebElement methodType;
@@ -40,6 +40,8 @@ public class ManageId {
     WebElement bankName;
     @FindBy(xpath = "//tbody//td[3]")
     WebElement bankNameOnList;
+    @FindBy(xpath = "//textarea[@placeholder='OTP setting url']")
+    WebElement otpTextArea;
 
 
     public void clickAndSelectMethod(String btn, String method) {
@@ -118,5 +120,28 @@ public class ManageId {
                 logger.info("Method not found :: " + method);
         }
 
+    }
+
+    public void updateOTP( String value){
+        try {
+            commonMethod.isElementPresent(otpTextArea);
+            copyText = otpTextArea.getText();
+            commonMethod.explicitWait(PathConstants.WAIT_MEDIUM);
+            commonMethod.clearAndType(otpTextArea,value);
+        }catch (Exception e){
+            logger.info("Otp not update with new setting :: "+value);
+            logger.error("OTP not update with new setting :: " +e.getMessage());
+        }
+
+    }
+
+    public void updateOldOTP() {
+        try {
+            commonMethod.isElementPresent(otpTextArea);
+            commonMethod.clearAndType(otpTextArea, TestBase.globPop.get("originalOTP"));
+        } catch (Exception e) {
+            logger.info("Otp not update with new setting :: " + copyText);
+            logger.error("OTP not update with new setting :: " + e.getMessage());
+        }
     }
 }

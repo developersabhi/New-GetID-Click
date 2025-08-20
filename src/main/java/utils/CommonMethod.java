@@ -24,7 +24,7 @@ public class CommonMethod {
     private static final Logger logger = Logger.getLogger(CommonMethod.class);
     WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofMillis(PathConstants.defaultTimeout));
     private static final TestBase testbase = TestBase.getInstance();
-
+    protected static String toasterMsgForOTP="";
     BaseUtil baseUtil = new BaseUtil();
 
     public CommonMethod() {
@@ -67,6 +67,10 @@ public class CommonMethod {
     WebElement cancelBankBtn;
     @FindBy(xpath = "//a[@href='/profile']")
     WebElement profileBtn;
+    @FindBy(xpath = "//a[contains(text(),'OTP Setting')]")
+    WebElement otpSettingBtn;
+    @FindBy(xpath = "//button[contains(text(),' Save ')]")
+    WebElement saveOtpBtn;
     @FindBy(xpath = "//div[@class='wallet-submit-btn']//button[contains(text(),'Submit')]")
     WebElement submitForChangePasswordBtn;
     @FindBy(xpath = "/div[@class='toast toast-success' ]//div[contains(text(),'/div[@class='toast toast-success' ]//div[contains(text(),'Bank account added successfully.')]')]")
@@ -77,6 +81,10 @@ public class CommonMethod {
     WebElement successfullyPaymentAddedToasterMsg;
     @FindBy(xpath = "//div[@id='toast-container']//div[contains(text(),'Status updated successfully')]")
     WebElement manageIdStatusChangeToasterMsg;
+    @FindBy(xpath = "//textarea[@placeholder='OTP setting url']")
+    WebElement otpTextArea;
+    @FindBy(xpath = "//div[@id='toast-container']//div[contains(text(),'OTP Url updated successfully.')]")
+    WebElement successfullyOtpSettingUpdateMsg;
 
 
     public void clearAndType(WebElement element, String value) {
@@ -216,9 +224,18 @@ public class CommonMethod {
                     profileBtn.click();
                     break;
                 case "SUBMIT PASSWORD":
-                    explicitWait(15000);
+                    explicitWait(PathConstants.WAIT_HIGH);
                     isElementPresent(submitForChangePasswordBtn);
                     submitForChangePasswordBtn.click();
+                    break;
+                case "OTP SETTING":
+                    isElementPresent(otpSettingBtn);
+                    otpSettingBtn.click();
+                    break;
+                case "SAVE OTP":
+                    isElementPresent(saveOtpBtn);
+                    saveOtpBtn.click();
+                    toasterMsgForOTP=baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText();
                     break;
                 default:
                     logger.error("Button not found or not implemented: " + button);
@@ -226,6 +243,15 @@ public class CommonMethod {
         } catch (Exception e) {
             logger.error("Error while clicking on button [" + button + "] :: " + e.getMessage());
         }
+    }
+
+    public void copyText(WebElement element){
+        Actions actions = new Actions(TestBase.getWebDriver());
+        actions.click(element).keyDown(Keys.CONTROL).sendKeys("a")
+                .sendKeys("c")
+                .keyUp(Keys.CONTROL)
+                .build()
+                .perform();
     }
 
     public void enterText(WebElement element, String text) {
@@ -275,6 +301,11 @@ public class CommonMethod {
             case "CHANGE PASSWORD":
                 Assert.assertEquals("Error message for password not chnage", "Password changed successfully", baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
                 logger.info(baseUtil.getToasterMsg(successfullyPasswordChangeMsg));
+                break;
+            case "OTP UPDATE":
+                Assert.assertEquals("Error message for OTP setting not change",
+                        "OTP Url updated successfully.", toasterMsgForOTP);
+                logger.info(baseUtil.getToasterMsg(successfullyOtpSettingUpdateMsg));
                 break;
             default:
                 logger.info("Unable to find action " + action);
