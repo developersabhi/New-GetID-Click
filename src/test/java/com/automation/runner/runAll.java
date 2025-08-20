@@ -11,11 +11,13 @@ import org.junit.runner.RunWith;
                 "src/test/java/features/director/aLogin.feature",
 //                "src/test/java/features/director/directorLogin.feature",
                 "src/test/java/features/director/manageId.feature",
+                "src/test/java/features/director/profile.feature",
                 "src/test/java/features/director/zCloseBrowser.feature",
         },
         glue = {
                 "com.automation.test",
                 "com.automation.director.manageId",
+                "com.automation.director.profile",
 //                "com.automation.director.login",
         }
 //        ,

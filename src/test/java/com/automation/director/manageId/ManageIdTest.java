@@ -1,10 +1,12 @@
 package com.automation.director.manageId;
 
 import io.cucumber.java.en.Then;
+import utils.CommonMethod;
 
 public class ManageIdTest {
 
     ManageId manageId = new ManageId();
+    CommonMethod commonMethod = new CommonMethod();
 
     @Then("click on the {string} dropdown and choice the {string}.")
     public void click_on_the_dropdown_and_choice_the(String btn, String method) {
@@ -23,7 +25,7 @@ public class ManageIdTest {
 
     @Then("Verify the {string} Payment method validation message on screen.")
     public void verify_the_payment_method_validation_message_on_screen(String action) {
-        manageId.verifyToasterMsg(action);
+        commonMethod.verifyToasterMsg(action);
     }
 
     @Then("Verify the add {string} method on list.")
@@ -33,7 +35,7 @@ public class ManageIdTest {
 
     @Then("Verify the {string} change on manage id list.")
     public void verify_the_change_on_manage_id_list(String status) {
-        manageId.verifyToasterMsg(status);
+        commonMethod.verifyToasterMsg(status);
     }
 
     @Then("click on the {string} dropdown and choice the {string} country.")

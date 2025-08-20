@@ -30,4 +30,9 @@ public class CommonStepDefinition {
     public void user_log_in_to_provider_url_and_is_already_present_at_the_website_list_page() {
         testBase.login();
     }
+
+    @Then("Verify the {string} toaster message on screen.")
+    public void verify_the_toaster_message_on_screen(String action) {
+        commonMethod.verifyToasterMsg(action);
+    }
 }

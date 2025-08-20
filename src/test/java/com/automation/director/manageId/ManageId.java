@@ -7,7 +7,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
 import utils.BaseUtil;
 import utils.CommonMethod;
 import utils.TestBase;
@@ -22,7 +21,6 @@ public class ManageId {
     ManageId() {
         PageFactory.initElements(TestBase.getWebDriver(), this);
     }
-
     BaseUtil baseUtil = new BaseUtil();
 
     static protected String methodNameValue, bankNameValue;
@@ -37,16 +35,11 @@ public class ManageId {
     WebElement searchManageId;
     @FindBy(xpath = "//table//td[3]")
     WebElement methodNameOnList;
-    @FindBy(xpath = "//div[@class='toast toast-success' ]//div[contains(text(),'Payment method added successfully.')]")
-    WebElement successfullyPaymentAddedToasterMsg;
-    @FindBy(xpath = "//div[@id='toast-container']//div[contains(text(),'Status updated successfully')]")
-    WebElement manageIdStatusChangeToasterMsg;
     @FindBy(xpath = "//input[@placeholder='Enter Bank Name']")
     WebElement bankName;
     @FindBy(xpath = "//tbody//td[3]")
     WebElement bankNameOnList;
-    @FindBy(xpath = "//div[@class='toast toast-success' ]//div[contains(text(),'Bank account added successfully.')]")
-    WebElement successfullyBankAddedToasterMsg;
+
 
     public void clickAndSelectMethod(String btn, String method) {
         commonMethod.clickOnButton(btn);
@@ -64,18 +57,11 @@ public class ManageId {
     }
 
     public void selectCountryFromDropdown(String btn, String countryName) {
-        // Click on the Country dropdown
-        commonMethod.clickOnButton(btn); // Click on the dropdown
+        commonMethod.clickOnButton(btn);
 
-        // Dynamically select the country using countryName
         WebElement countryOption = TestBase.getWebDriver().findElement(By.xpath("//ul//li[@data-value='" + countryName + "']"));
-        commonMethod.clickElement(countryOption); // Click on the country
+        commonMethod.clickElement(countryOption);
     }
-//    public void clickAndSelectCountry(String btn, String countryName){
-//        commonMethod.clickOnButton(btn);
-//        commonMethod.isElementPresent();
-//
-//    }
 
     public void enterValueOnTheField(String value, String field) {
         switch (field.toUpperCase()) {
@@ -113,35 +99,7 @@ public class ManageId {
         commonMethod.explicitWait(1000);
     }
 
-    public void verifyToasterMsg(String action) {
-        switch (action.toUpperCase()) {
-            case "ADD PAYEMENT":
-                Assert.assertEquals("Error message for payment not added",
-                        "Payment method added successfully.",
-                        baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
-                logger.info(baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg));
-                logger.info("Payment method added successfully.");
-                break;
-            case "STATUS":
-                commonMethod.clickOnButton("Status");
-                Assert.assertEquals("Error message for status not chanage",
-                        "Status updated successfully",
-                        baseUtil.getToasterMsg(manageIdStatusChangeToasterMsg).getText());
-                logger.info("Payment method status change successfully.");
-                break;
-            case "ADD BANK":
-                Assert.assertEquals("Error message for bank not added",
-                        "Bank account added successfully.",
-                        baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
-                logger.info(baseUtil.getToasterMsg(successfullyBankAddedToasterMsg));
-                logger.info("Bank added successfully.");
-                break;
-            default:
-                logger.info("Unable to find action " + action);
-        }
-    }
-
-    public void verifyAddPaymentMethod(String method) {
+    public void verifyAddPaymentMethod(String method){
         String expected;
         String actual;
         switch (method.toUpperCase()) {

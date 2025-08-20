@@ -5,18 +5,18 @@ Feature: NewGetIdClick --> Add Payment Method
 
   @ManageId
   Scenario:Scenario_1: Add Payment Method and verify the added Payment Method.
-    Given User log in to provider URL and is already present at the website list page.
+#    Given User log in to provider URL and is already present at the website list page.
     Then click on the "Add Payment Method" button.
     Then click on the "Method Type" dropdown and choice the "UPI".
     Then enter the value "Auto" for the field "Method Name".
     Then click on the Choose File and Upload.
     Then click on the "Submit Payment" button.
-    Then Verify the "ADD PAYEMENT" Payment method validation message on screen.
+    Then Verify the "ADD PAYMENT" Payment method validation message on screen.
     Then Verify the add "Payment" method on list.
     Then Verify the "Status" change on manage id list.
 
     Scenario: Scenario_2: Add Banks and verify the added Banks.
-    Given User log in to provider URL and is already present at the website list page.
+#    Given User log in to provider URL and is already present at the website list page.
       Then click on the "Banks" button.
       Then click on the "Add Bank" button.
       Then enter the value "AutoBank" for the field "Bank Name".
@@ -29,3 +29,4 @@ Feature: NewGetIdClick --> Add Payment Method
       Then Verify the "ADD BANK" Payment method validation message on screen.
       Then Verify the add "Bank" method on list.
       Then Verify the "Status" change on manage id list.
+

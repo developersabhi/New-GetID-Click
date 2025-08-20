@@ -1,6 +1,7 @@
 package utils;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -24,6 +25,7 @@ public class CommonMethod {
     WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofMillis(10000));
     private static final TestBase testbase = TestBase.getInstance();
 
+    BaseUtil baseUtil = new BaseUtil();
     public CommonMethod() {
         PageFactory.initElements(TestBase.getWebDriver(), this);
     }
@@ -62,6 +64,28 @@ public class CommonMethod {
     WebElement submitBankBtn;
     @FindBy(xpath = "//div[@class='modal-footer']/button[contains(text(),'Cancel')]")
     WebElement cancelBankBtn;
+    @FindBy(xpath = "//a[@href='/profile']")
+    WebElement profileBtn;
+    @FindBy(xpath = "//div[@class='wallet-submit-btn']//button[contains(text(),'Submit')]")
+    WebElement submitForChangePasswordBtn;
+    @FindBy(xpath = "/div[@class='toast toast-success' ]//div[contains(text(),'/div[@class='toast toast-success' ]//div[contains(text(),'Bank account added successfully.')]')]")
+    WebElement successfullyPasswordChangeMsg;
+    @FindBy(xpath = "//div[@class='toast toast-success' ]//div[contains(text(),'Bank account added successfully.')]")
+    WebElement successfullyBankAddedToasterMsg;
+    @FindBy(xpath = "//div[@class='toast toast-success' ]//div[contains(text(),'Payment method added successfully.')]")
+    WebElement successfullyPaymentAddedToasterMsg;
+    @FindBy(xpath = "//div[@id='toast-container']//div[contains(text(),'Status updated successfully')]")
+    WebElement manageIdStatusChangeToasterMsg;
+
+
+    public void clearAndType( WebElement element, String value) {
+        Actions actions = new Actions(TestBase.getWebDriver());
+        actions.click(element)
+                .keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL)
+                .sendKeys(Keys.DELETE)
+                .perform();
+        element.sendKeys(value);
+    }
 
     public static Map<String, String> readPropertied(){
         Map<String,String> all = new HashMap<>();
@@ -184,6 +208,15 @@ public class CommonMethod {
                     isElementPresent(submitBankBtn);
                     submitBankBtn.click();
                     break;
+                case "PROFILE":
+                    isElementPresent(profileBtn);
+                    profileBtn.click();
+                    break;
+                case "SUBMIT PASSWORD":
+                    explicitWait(15000);
+                    isElementPresent(submitForChangePasswordBtn);
+                    submitForChangePasswordBtn.click();
+                    break;
                 default:
                     logger.error("Button not found or not implemented: " + button);
             }
@@ -211,6 +244,39 @@ public class CommonMethod {
             TestBase.getWebDriver().quit();
         }catch (Exception e){
             logger. error("Unable to close the browser");
+        }
+    }
+
+    public void verifyToasterMsg(String action){
+        switch (action.toUpperCase()){
+            case "ADD PAYMENT":
+                Assert.assertEquals("Error message for payment not added",
+                        "Payment method added successfully.",
+                        baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
+                logger.info(baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg));
+                logger.info("Payment method added successfully.");
+                break;
+            case "STATUS":
+                clickOnButton("Status");
+                Assert.assertEquals("Error message for status not chanage",
+                        "Status updated successfully",
+                        baseUtil.getToasterMsg(manageIdStatusChangeToasterMsg).getText());
+                logger.info("Payment method status change successfully.");
+                break;
+            case "ADD BANK":
+                Assert.assertEquals("Error message for bank not added",
+                        "Bank account added successfully.",
+                        baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
+                logger.info(baseUtil.getToasterMsg(successfullyBankAddedToasterMsg));
+                logger.info("Bank added successfully.");
+                break;
+            case "CHANGE PASSWORD":
+                Assert.assertEquals("Error message for password not chnage","Password changed successfully",baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
+                logger.info(baseUtil.getToasterMsg(successfullyPasswordChangeMsg));
+                break;
+            default:
+                logger.info("Unable to find action " + action);
+
         }
     }
 }
