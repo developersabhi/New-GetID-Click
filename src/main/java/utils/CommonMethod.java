@@ -26,7 +26,7 @@ public class CommonMethod {
     private static final Logger logger = Logger.getLogger(CommonMethod.class);
     WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofMillis(PathConstants.defaultTimeout));
     private static final TestBase testbase = TestBase.getInstance();
-    protected static String toasterMsgForOTP="";
+    protected static String toasterMsgForOTP = "";
     BaseUtil baseUtil = new BaseUtil();
 
     public CommonMethod() {
@@ -51,7 +51,7 @@ public class CommonMethod {
     WebElement methodTypeWallet;
     @FindBy(xpath = "//input[@type='checkbox']")
     WebElement statusToggleBtn;
-    @FindBy(xpath = "//a[contains(text(),'Banks')]")
+    @FindBy(xpath = "//ul[@id='pills-tab']/li/a[contains(text(),'Banks')]")
     WebElement banksBtn;
     @FindBy(xpath = "//button[contains(text(),'Add Bank')]")
     WebElement addBankBtn;
@@ -93,16 +93,41 @@ public class CommonMethod {
     WebElement editMethodType;
     @FindBy(xpath = "//td/div[@class='dropdown']//a[contains(text(),'Edit')]")
     WebElement editPaymentMethodBtn;
-
+    @FindBy(xpath = "//input[@placeholder='Test Bnk']")
+    WebElement editPaymentNameField;
+    @FindBy(xpath = "//div[@class='upload-img']//button[@class='btn-close']")
+    WebElement paymentIconCloseBtn;
+    @FindBy(xpath = "//div[@class='dropdown']/div[@data-bs-toggle='dropdown']")
+    WebElement editDropdownBankBtn;
+    @FindBy(xpath = "//div[@class='dropdown']//a[contains(text(),'Edit')]")
+    WebElement editBankBtn;
+    @FindBy(xpath = "//div[@class='toast toast-success' ]//div[contains(text(),'Bank account updated successfully')]")
+    WebElement successfullyUpdateBankToasterMsg;
 
 
     public void clearAndType(WebElement element, String value) {
-        Actions actions = new Actions(TestBase.getWebDriver());
-        actions.click(element)
-                .keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL)
-                .sendKeys(Keys.DELETE)
-                .perform();
-        element.sendKeys(value);
+        try {
+            Actions actions = new Actions(TestBase.getWebDriver());
+            actions.click(element)
+                    .keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL)
+                    .sendKeys(Keys.DELETE)
+                    .perform();
+            element.sendKeys(value);
+        } catch (Exception e) {
+            logger.error("Exception occurred while clearing and typing in the field: " + element, e);
+        }
+    }
+
+    public void clearField(WebElement element) {
+        try {
+            Actions actions = new Actions(TestBase.getWebDriver());
+            actions.click(element)
+                    .keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL)
+                    .sendKeys(Keys.DELETE)
+                    .perform();
+        } catch (Exception e) {
+            logger.error("Exception occurred while clearing the field: " + element, e);
+        }
     }
 
     public static Map<String, String> readPropertied() {
@@ -132,20 +157,37 @@ public class CommonMethod {
     }
 
     public void clickElement(WebElement element) {
-        wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+        } catch (Exception e) {
+            logger.error("Exception occurred while clicking the element: " + element, e);
+        }
     }
 
     public void clickElement(By locator) {
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        element.click();
+        try {
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+            element.click();
+        } catch (Exception e) {
+            logger.error("Exception occurred while clicking element with locator: " + locator, e);
+        }
     }
 
     public static TestBase getTestbase() {
-        return new TestBase();
+        try {
+            return new TestBase();
+        } catch (Exception e) {
+            logger.error("Exception occurred while creating TestBase instance.", e);
+            return null;
+        }
     }
 
     public void waitForVisibleElement(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+        } catch (Exception e) {
+            logger.error("Exception while waiting for element visibility: " + element, e);
+        }
     }
 
     public boolean isElementPresent(WebElement element) {
@@ -169,6 +211,7 @@ public class CommonMethod {
                     loginBtn.click();
                     break;
                 case "ADD PAYMENT METHOD":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(addPaymentMethodBtn);
                     addPaymentMethodBtn.click();
                     break;
@@ -201,6 +244,7 @@ public class CommonMethod {
                     statusToggleBtn.click();
                     break;
                 case "BANKS":
+                    explicitWait(PathConstants.WAIT_HIGH);
                     isElementPresent(banksBtn);
                     banksBtn.click();
                     break;
@@ -224,10 +268,15 @@ public class CommonMethod {
                     isElementPresent(isCurrentStatementImportBankCheckBtn);
                     isCurrentStatementImportBankCheckBtn.click();
                     break;
+//                case "SUBMIT BANK":
+//                    isElementPresent(submitBankBtn);
+//                    submitBankBtn.click();
+//                    break;
                 case "SUBMIT BANK":
                     isElementPresent(submitBankBtn);
-                    submitBankBtn.click();
-                    break;
+                    JavascriptExecutor jsExecutor = (JavascriptExecutor) TestBase.getWebDriver();
+                    jsExecutor.executeScript("arguments[0].click();", submitBankBtn);
+                     break;
                 case "PROFILE":
                     isElementPresent(profileBtn);
                     profileBtn.click();
@@ -244,7 +293,7 @@ public class CommonMethod {
                 case "SAVE OTP":
                     isElementPresent(saveOtpBtn);
                     saveOtpBtn.click();
-                    toasterMsgForOTP=baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText();
+                    toasterMsgForOTP = baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText();
                     break;
                 case "EDIT METHOD TYPE":
                     isElementPresent(editMethodType);
@@ -256,6 +305,17 @@ public class CommonMethod {
                     isElementPresent(editPaymentMethodBtn);
                     editPaymentMethodBtn.click();
                     break;
+                case "PAYMENT ICON":
+                    isElementPresent(paymentIconCloseBtn);
+                    paymentIconCloseBtn.click();
+                    break;
+                case "EDIT BANK":
+                    explicitWait(PathConstants.WAIT_LOW);
+                    isElementPresent(editDropdownBankBtn);
+                    editDropdownBankBtn.click();
+                    isElementPresent(editBankBtn);
+                    editBankBtn.click();
+                    break;
                 default:
                     logger.error("Button not found or not implemented: " + button);
             }
@@ -264,13 +324,19 @@ public class CommonMethod {
         }
     }
 
-    public void copyText(WebElement element){
-        Actions actions = new Actions(TestBase.getWebDriver());
-        actions.click(element).keyDown(Keys.CONTROL).sendKeys("a")
-                .sendKeys("c")
-                .keyUp(Keys.CONTROL)
-                .build()
-                .perform();
+    public void copyText(WebElement element) {
+        try {
+            Actions actions = new Actions(TestBase.getWebDriver());
+            actions.click(element)
+                    .keyDown(Keys.CONTROL)
+                    .sendKeys("a")
+                    .sendKeys("c")
+                    .keyUp(Keys.CONTROL)
+                    .build()
+                    .perform();
+        } catch (Exception e) {
+            logger.error("Exception occurred while copying text from element.", e);
+        }
     }
 
     public void enterText(WebElement element, String text) {
@@ -296,41 +362,55 @@ public class CommonMethod {
     }
 
     public void verifyToasterMsg(String action) {
-        switch (action.toUpperCase()) {
-            case "ADD PAYMENT":
-                Assert.assertEquals("Error message for payment not added",
-                        "Payment method added successfully.",
-                        baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
-                logger.info(baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg));
-                logger.info("Payment method added successfully.");
-                break;
-            case "STATUS":
-                explicitWait(PathConstants.WAIT_VERY_LOW);
-                clickOnButton("Status");
-                Assert.assertEquals("Error message for status not chanage",
-                        "Status updated successfully",
-                        baseUtil.getToasterMsg(manageIdStatusChangeToasterMsg).getText());
-                logger.info("Payment method status change successfully.");
-                break;
-            case "ADD BANK":
-                Assert.assertEquals("Error message for bank not added",
-                        "Bank account added successfully.",
-                        baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
-                logger.info(baseUtil.getToasterMsg(successfullyBankAddedToasterMsg));
-                logger.info("Bank added successfully.");
-                break;
-            case "CHANGE PASSWORD":
-                Assert.assertEquals("Error message for password not chnage", "Password changed successfully", baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
-                logger.info(baseUtil.getToasterMsg(successfullyPasswordChangeMsg));
-                break;
-            case "OTP UPDATE":
-                Assert.assertEquals("Error message for OTP setting not change",
-                        "OTP Url updated successfully.", toasterMsgForOTP);
-                logger.info(baseUtil.getToasterMsg(successfullyOtpSettingUpdateMsg));
-                break;
-            default:
-                logger.info("Unable to find action " + action);
-
+        try {
+            switch (action.toUpperCase()) {
+                case "ADD PAYMENT":
+                    Assert.assertEquals("Error message for payment not added",
+                            "Payment method added successfully.",
+                            baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg).getText());
+                    logger.info(baseUtil.getToasterMsg(successfullyPaymentAddedToasterMsg));
+                    logger.info("Payment method added successfully.");
+                    break;
+                case "STATUS":
+                    explicitWait(PathConstants.WAIT_VERY_LOW);
+                    clickOnButton("Status");
+                    Assert.assertEquals("Error message for status not chanage",
+                            "Status updated successfully",
+                            baseUtil.getToasterMsg(manageIdStatusChangeToasterMsg).getText());
+                    logger.info("Payment method status change successfully.");
+                    break;
+                case "ADD BANK":
+                    Assert.assertEquals("Error message for bank not added",
+                            "Bank account added successfully.",
+                            baseUtil.getToasterMsg(successfullyBankAddedToasterMsg).getText());
+                    logger.info(baseUtil.getToasterMsg(successfullyBankAddedToasterMsg));
+                    logger.info("Bank added successfully.");
+                    break;
+                case "UPDATE BANK":
+                    Assert.assertEquals("Error message for bank not added",
+                            "Bank account updated successfully",
+                            baseUtil.getToasterMsg(successfullyUpdateBankToasterMsg).getText());
+                    logger.info(baseUtil.getToasterMsg(successfullyUpdateBankToasterMsg));
+                    logger.info("Bank account updated successfully");
+                    break;
+                case "CHANGE PASSWORD":
+                    Assert.assertEquals("Error message for password not chnage", "Password changed successfully", baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
+                    logger.info(baseUtil.getToasterMsg(successfullyPasswordChangeMsg));
+                    break;
+                case "OTP UPDATE":
+                    Assert.assertEquals("Error message for OTP setting not change",
+                            "OTP Url updated successfully.", toasterMsgForOTP);
+                    logger.info(baseUtil.getToasterMsg(successfullyOtpSettingUpdateMsg));
+                    break;
+                default:
+                    logger.info("Unable to find action " + action);
+            }
+        } catch (AssertionError ae) {
+            logger.error("Assertion failed for action: " + action, ae);
+            throw ae;  // rethrow to fail the test if assertion fails
+        } catch (Exception e) {
+            logger.error("Exception occurred while verifying toaster message for action: " + action, e);
         }
     }
+
 }

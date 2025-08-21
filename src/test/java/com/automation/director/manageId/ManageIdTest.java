@@ -71,7 +71,7 @@ public class ManageIdTest {
     @Then("click on the {string} button and Verify the error message for following field.")
     public void click_on_the_button_and_verify_the_error_message_for_following_field(String btn, DataTable dataTable) {
         commonMethod.clickOnButton("Submit Payment");
-        commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
+        commonMethod.explicitWait(PathConstants.WAIT_LOW);
         List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
         manageId.verifyErrorMsg(data);
     }
@@ -81,6 +81,22 @@ public class ManageIdTest {
         manageId.enterMethodName(value,field);
         List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
         manageId.verifyErrorMsg(data);
+    }
+    @Then("enter the edit value {string} for the field {string}")
+    public void enter_the_edit_value_for_the_field(String value, String field, DataTable dataTable) {
+        manageId.enterEditMethodName(value,field);
+        List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
+        manageId.verifyErrorMsg(data);
+    }
+
+    @Then("remove the {string} and Verify the error message for following field.")
+    public void remove_the_and_verify_the_error_message_for_following_field(String field, DataTable dataTable) {
+        manageId.removeField(field);
+        commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
+        List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
+        manageId.verifyEditErrorMsg(data);
+//        commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
+//        commonMethod.clickOnButton("Submit Payment");
     }
 
 }

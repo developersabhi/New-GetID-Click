@@ -36,6 +36,7 @@ public class Login {
     WebElement successfulLoginToasterMessage;
     @FindBy(xpath = "//div[@class='toast-top-right']//following::div[contains(text(),'Error 400: Invalid User ID or Password')]")
     WebElement errorToasterMessage;
+
     public void verifyLoginFunctionality(String username, String password, String expectedMsg) {
         try {
             commonMethod.isElementPresent(usernameInputField);

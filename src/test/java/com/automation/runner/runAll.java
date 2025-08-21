@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 //                "src/test/java/features/director/directorLogin.feature",
                 "src/test/java/features/director/manageId.feature",
 //                "src/test/java/features/director/profile.feature",
-//                "src/test/java/features/director/zCloseBrowser.feature",
+                "src/test/java/features/director/zCloseBrowser.feature",
         },
         glue = {
                 "com.automation.test",
