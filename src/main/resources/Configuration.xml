@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <getID>
+        <env>provider</env>
+        <browser>chrome</browser>
+        <provider_userName>admin@getid.com</provider_userName>
+        <provider_password>123456</provider_password>
+        <pageSpinnerlocator>xpath===//div[@class='cssload-container']</pageSpinnerlocator>
+        <providerUserName_Locator>xpath===//input[@placeholder='Enter Login ID']</providerUserName_Locator>
+        <providerPassword_Locator>xpath===//input[@placeholder='Enter Password']</providerPassword_Locator>
+        <logout>xpath===//button[contains(text(),'Logout')]</logout>
+        <provider_login>xpath===//button[contains(text(),'Login')]</provider_login>
+        <userIDLoginBtn>xpath===//div[@id='navbarNav']/following::a[contains(text(),'Login')]</userIDLoginBtn>
+        <userUserName_Locator>xpath===//*[@id='InputUsername']</userUserName_Locator>
+        <userPassword_Locator>xpath===//*[@id='InputPassword']</userPassword_Locator>
+        <user_login>xpath===//button[contains(text(),'Log In')]</user_login>
+        <user_logout></user_logout>
+        <agentUserName_Locator>id===login-userid</agentUserName_Locator>
+        <agentPassword_Locator>id===password</agentPassword_Locator>
+        <agent_login>id===login_btn_admin</agent_login>
+        <agent_logout></agent_logout>
+        <subAdminUserName_Locator>id===login-userid</subAdminUserName_Locator>
+        <subAdminPassword_Locator>id===password</subAdminPassword_Locator>
+        <subAdmin_login>id===login_btn_admin</subAdmin_login>
+        <subAdmin_logout></subAdmin_logout>
+    </getID>
+    <environment_url>
+        <provider>provider===https://admin.kingdombook1.com/login</provider>
+        <user>user===https://www.11bookexch.com</user>
+        <agent>agent===https://ag.yesno247.in/login</agent>
+        <subAdmin>subAdmin===https://ag.yesno247.in/login</subAdmin>
+        <employee> </employee>
+        <ChromeSettingsPageClearCache>chrome://settings/clearBrowserData</ChromeSettingsPageClearCache>
+        <ChromeSettingsUI>id===clearBrowsingDataConfirm</ChromeSettingsUI>
+    </environment_url>
+
+    <userlogincredentials>
+        <provider_userName>admin@getid.com</provider_userName>
+        <provider_password>123456</provider_password>
+        <subAdmin_userName>betadda365</subAdmin_userName>
+        <subAdmin_password>Aa123456</subAdmin_password>
+        <user_userName>USER20203</user_userName>
+        <user_password>abcd12345</user_password>
+        <agent_userName>betadda2471</agent_userName>
+        <agent_password>Aa123456</agent_password>
+    </userlogincredentials>
+
+    <databaseconfig>
+
+    </databaseconfig>
+
+    <databaseuserconfig>
+
+    </databaseuserconfig>
+</Configuration>

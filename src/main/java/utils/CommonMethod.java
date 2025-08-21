@@ -1,6 +1,8 @@
 package utils;
 
 import constants.PathConstants;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -85,6 +87,13 @@ public class CommonMethod {
     WebElement otpTextArea;
     @FindBy(xpath = "//div[@id='toast-container']//div[contains(text(),'OTP Url updated successfully.')]")
     WebElement successfullyOtpSettingUpdateMsg;
+    @FindBy(xpath = "//td/div[@class='dropdown']/div[@data-bs-toggle='dropdown']")
+    WebElement editDropdownPaymentMethodBtn;
+    @FindBy(xpath = "//span[@class='current']")
+    WebElement editMethodType;
+    @FindBy(xpath = "//td/div[@class='dropdown']//a[contains(text(),'Edit')]")
+    WebElement editPaymentMethodBtn;
+
 
 
     public void clearAndType(WebElement element, String value) {
@@ -237,6 +246,16 @@ public class CommonMethod {
                     saveOtpBtn.click();
                     toasterMsgForOTP=baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText();
                     break;
+                case "EDIT METHOD TYPE":
+                    isElementPresent(editMethodType);
+                    editMethodType.click();
+                    break;
+                case "EDIT PAYMENT":
+                    isElementPresent(editDropdownPaymentMethodBtn);
+                    editDropdownPaymentMethodBtn.click();
+                    isElementPresent(editPaymentMethodBtn);
+                    editPaymentMethodBtn.click();
+                    break;
                 default:
                     logger.error("Button not found or not implemented: " + button);
             }
@@ -267,6 +286,7 @@ public class CommonMethod {
         }
     }
 
+    @After("@Test")
     public void closeBrowser() {
         try {
             TestBase.getWebDriver().quit();
@@ -285,6 +305,7 @@ public class CommonMethod {
                 logger.info("Payment method added successfully.");
                 break;
             case "STATUS":
+                explicitWait(PathConstants.WAIT_VERY_LOW);
                 clickOnButton("Status");
                 Assert.assertEquals("Error message for status not chanage",
                         "Status updated successfully",

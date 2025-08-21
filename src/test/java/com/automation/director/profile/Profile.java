@@ -2,7 +2,6 @@ package com.automation.director.profile;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;

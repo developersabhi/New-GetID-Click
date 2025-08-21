@@ -1,6 +1,8 @@
 package utils;
 
 import constants.PathConstants;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -50,7 +52,7 @@ public class TestBase {
         PageFactory.initElements(getWebDriver(), this);
         globPop = readPropertied();
     }
-
+    @Before("@Test")
     public void login(){
         try {
                 String  currentUrl =getWebDriver().getCurrentUrl();
