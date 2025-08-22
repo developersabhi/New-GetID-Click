@@ -22,7 +22,7 @@ public class ManageId {
     CommonMethod commonMethod = new CommonMethod();
     private static final Logger logger = Logger.getLogger(TestBase.class);
 
-    ManageId() {
+    public ManageId() {
         PageFactory.initElements(TestBase.getWebDriver(), this);
     }
 
@@ -37,7 +37,7 @@ public class ManageId {
     @FindBy(xpath = "//input[@type = 'file']")
     WebElement paymentIcon;
     @FindBy(xpath = "//input[@placeholder ='Search']")
-    WebElement searchManageId;
+    WebElement searchTextArea;
     @FindBy(xpath = "//table//td[3]")
     WebElement methodNameOnList;
     @FindBy(xpath = "//input[@placeholder='Enter Bank Name']")
@@ -46,9 +46,10 @@ public class ManageId {
     WebElement bankNameOnList;
     @FindBy(xpath = "//textarea[@placeholder='OTP setting url']")
     WebElement otpTextArea;
-    @FindBy(xpath = "//span[@class='current']")
+//    @FindBy(xpath = "//span[@class='current']")
+    @FindBy(xpath = "//div[@class='nice-select me-sm-2 default-select form-control wide']")
     WebElement editMethodType;
-//    @FindBy(xpath = "//input[@placeholder='Enter Bank Name']")
+    //    @FindBy(xpath = "//input[@placeholder='Enter Bank Name']")
     @FindBy(xpath = "//input[@placeholder='Test Bnk']")
     WebElement editMethodName;
     @FindBy(xpath = "//span[contains(text(),'Method type is required')]")
@@ -65,7 +66,7 @@ public class ManageId {
     WebElement getEditMethodNameErrorMsg;
     @FindBy(xpath = "//input[@type='file']/following-sibling::span")
     WebElement getEditPaymentIconErrorMsg;
-    @FindBy(xpath = "//div[@id='addbank']//form/div/label/following-sibling::span[contains(text(),'Bank Name is required')]")
+    @FindBy(xpath = "(//div[@id='addbank']//form/div/label/following-sibling::span)[1]")
     WebElement addBankErrorMsg;
     @FindBy(xpath = "//div[@id='addbank']//form/div/label/following-sibling::span[contains(text(),'Please select a Country')]")
     WebElement addCountyErrorMsg;
@@ -83,6 +84,8 @@ public class ManageId {
     @FindBy(xpath = "//input[@type='file']//following-sibling::span")
     WebElement bankIconEditErrorMsg;
 
+    @FindBy(xpath = "//div[@class='nice-select me-sm-2 default-select form-control wide open']/ul")
+    WebElement editMethodDropdownType;
 
     public void clickAndSelectMethod(String btn, String method) {
         try {
@@ -103,12 +106,11 @@ public class ManageId {
         }
     }
 
-
     public void clickAndEditMethod(String btn, String method) {
         try {
             commonMethod.explicitWait(PathConstants.WAIT_LOW);
             commonMethod.clickOnButton(btn);
-            commonMethod.isElementPresent(editMethodType);
+            commonMethod.isElementPresent(editMethodDropdownType);
             commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
             switch (method.toUpperCase()) {
                 case "UPI":
@@ -135,7 +137,6 @@ public class ManageId {
             logger.error("Exception occurred while selecting country: " + countryName, e);
         }
     }
-
 
     public void enterValueOnTheField(String value, String field) {
         try {
@@ -196,6 +197,11 @@ public class ManageId {
                     commonMethod.clearField(editMethodName);
                     editMethodName.sendKeys(value);
                     break;
+                case "BANK NAME":
+                    commonMethod.isElementPresent(editBankNameField);
+                    commonMethod.clearField(editBankNameField);
+                    editBankNameField.sendKeys(value);
+                    break;
                 default:
                     logger.error("Unable to find the input field :: " + field);
             }
@@ -209,11 +215,11 @@ public class ManageId {
     }
 
     public void uploadThePaymentIcon() {
-        try{
-        paymentIcon.sendKeys(System.getProperty("user.dir") + "/src/main/resources/QR.png");
-        commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
-    }catch (Exception e) {
-            logger.error("Exception occurred while uploading image for  icon." +e.getMessage());
+        try {
+            paymentIcon.sendKeys(System.getProperty("user.dir") + "/src/main/resources/QR.png");
+            commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
+        } catch (Exception e) {
+            logger.error("Exception occurred while uploading image for  icon." + e.getMessage());
         }
     }
 
@@ -222,7 +228,7 @@ public class ManageId {
             paymentIcon.sendKeys(System.getProperty("user.dir") + "/src/main/resources/QR_code.png");
             commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
         } catch (Exception e) {
-            logger.error("Exception occurred while uploading image for edit icon." +e.getMessage());
+            logger.error("Exception occurred while uploading image for edit icon." + e.getMessage());
         }
     }
 
@@ -233,10 +239,10 @@ public class ManageId {
         try {
             switch (method.toUpperCase()) {
                 case "PAYMENT":
-                    commonMethod.isElementPresent(searchManageId);
-                    searchManageId.clear();
-                    searchManageId.sendKeys(methodNameValue);
-                    searchManageId.sendKeys(Keys.ENTER);
+                    commonMethod.isElementPresent(searchTextArea);
+                    searchTextArea.clear();
+                    searchTextArea.sendKeys(methodNameValue);
+                    searchTextArea.sendKeys(Keys.ENTER);
                     commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
                     expected = methodNameValue;
                     actual = methodNameOnList.getText();
@@ -244,10 +250,10 @@ public class ManageId {
                     break;
 
                 case "EDIT PAYMENT":
-                    commonMethod.isElementPresent(searchManageId);
-                    searchManageId.clear();
-                    searchManageId.sendKeys(editMethodNameValue);
-                    searchManageId.sendKeys(Keys.ENTER);
+                    commonMethod.isElementPresent(searchTextArea);
+                    searchTextArea.clear();
+                    searchTextArea.sendKeys(editMethodNameValue);
+                    searchTextArea.sendKeys(Keys.ENTER);
                     commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
                     expected = editMethodNameValue;
                     actual = methodNameOnList.getText();
@@ -255,15 +261,27 @@ public class ManageId {
                     break;
 
                 case "BANK":
-                    commonMethod.isElementPresent(searchManageId);
-                    searchManageId.clear();
-                    searchManageId.sendKeys(bankNameValue);
-                    searchManageId.sendKeys(Keys.ENTER);
+                    commonMethod.isElementPresent(searchTextArea);
+                    searchTextArea.clear();
+                    searchTextArea.sendKeys(bankNameValue);
+                    searchTextArea.sendKeys(Keys.ENTER);
                     commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
                     expected = bankNameValue;
                     actual = bankNameOnList.getText();
                     Assert.assertEquals("Bank Method Added :: ", expected, actual);
                     break;
+
+                case "EDIT BANK":
+                    commonMethod.isElementPresent(searchTextArea);
+                    searchTextArea.clear();
+                    searchTextArea.sendKeys(editMethodNameValue);
+                    searchTextArea.sendKeys(Keys.ENTER);
+                    commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
+                    expected = editMethodNameValue;
+                    actual = bankNameOnList.getText();
+                    Assert.assertEquals("Bank Method Added :: ", expected, actual);
+                    break;
+
 
                 default:
                     logger.info("Method not found :: " + method);
@@ -310,43 +328,43 @@ public class ManageId {
                             Assert.assertEquals("Error message for method type not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + methodTypeErrorMsg.getText(),
                                     errorMsg, methodTypeErrorMsg.getText());
-                            logger.info("Actual error msg :: "+methodTypeErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + methodTypeErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         case "METHOD NAME":
                             Assert.assertEquals("Error message for method name not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + methodNameErrorMsg.getText(),
                                     errorMsg, methodNameErrorMsg.getText());
-                            logger.info("Actual error msg :: "+methodNameErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + methodNameErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         case "PAYMENT ICON":
                             Assert.assertEquals("Error message for payment icon not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + paymentIconErrorMsg.getText(),
                                     errorMsg, paymentIconErrorMsg.getText());
-                            logger.info("Actual error msg :: "+paymentIconErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + paymentIconErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         case "BANK NAME":
                             Assert.assertEquals("Error message for add bank  not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + addBankErrorMsg.getText(),
                                     errorMsg, addBankErrorMsg.getText());
-                            logger.info("Actual error msg :: "+addBankErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + addBankErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         case "COUNTRY":
                             Assert.assertEquals("Error message for add bank  not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + addCountyErrorMsg.getText(),
                                     errorMsg, addCountyErrorMsg.getText());
-                            logger.info("Actual error msg :: "+addCountyErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + addCountyErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         case "BANK ICON":
                             Assert.assertEquals("Error message for add bank  not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + bankIconErrorMsg.getText(),
                                     errorMsg, bankIconErrorMsg.getText());
-                            logger.info("Actual error msg :: "+bankIconErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + bankIconErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         default:
                             System.out.println("Unknown field: " + fieldName);
@@ -371,23 +389,23 @@ public class ManageId {
                             Assert.assertEquals("Error message for method name not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + getEditMethodNameErrorMsg.getText(),
                                     errorMsg, getEditMethodNameErrorMsg.getText());
-                            logger.info("Actual error msg :: "+getEditMethodNameErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + getEditMethodNameErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
 
                         case "PAYMENT ICON":
                             Assert.assertEquals("Error message for payment icon not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + getEditPaymentIconErrorMsg.getText(),
                                     errorMsg, getEditPaymentIconErrorMsg.getText());
-                            logger.info("Actual error msg :: "+getEditPaymentIconErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + getEditPaymentIconErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         case "BANK NAME":
                             Assert.assertEquals("Error message for bank name icon as expected. Expected :: "
                                             + errorMsg + " Actual :: " + bankEditErrorMsg.getText(),
                                     errorMsg, bankEditErrorMsg.getText());
-                            logger.info("Actual error msg :: "+bankEditErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + bankEditErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
 //                        case "COUNTRY":
 //                            Assert.assertEquals("Error message for country not as expected. Expected :: "
@@ -400,14 +418,14 @@ public class ManageId {
                             Assert.assertEquals("Error message for bank icon not as expected. Expected :: "
                                             + errorMsg + " Actual :: " + bankIconEditErrorMsg.getText(),
                                     errorMsg, bankIconEditErrorMsg.getText());
-                            logger.info("Actual error msg :: "+bankIconEditErrorMsg.getText());
-                            logger.info("Expected error msg :: "+errorMsg );
+                            logger.info("Actual error msg :: " + bankIconEditErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
                             break;
                         default:
                             System.out.println("Unknown field: " + fieldName);
                     }
                 } catch (AssertionError | Exception e) {
-                    System.err.println("Verification failed for field: " + fieldName);
+                    System.err.println("Verification failed for edit field: " + fieldName);
                     System.err.println("Expected: " + errorMsg);
                     e.printStackTrace();
                 }
@@ -440,8 +458,7 @@ public class ManageId {
 
                 case "EDIT BANK NAME":
                     if (commonMethod.isElementPresent(editBankNameField)) {
-                        commonMethod.clearField(editMethodName);
-                        editMethodName.clear();
+                        commonMethod.clearField(editBankNameField);
                         commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
                         commonMethod.clickOnButton("Submit Bank");
                     } else {
@@ -459,7 +476,7 @@ public class ManageId {
                     break;
 
                 default:
-                    logger.info("Unable to find out the field :: " + field);
+                    logger.info("Unable to find out for remove field :: " + field);
             }
         } catch (Exception e) {
             logger.error("Exception occurred while trying to remove field: " + field, e);

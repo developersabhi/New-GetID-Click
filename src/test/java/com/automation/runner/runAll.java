@@ -9,10 +9,11 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = {
 //                "src/test/java/features/director/aLogin.feature",
+//                "src/test/java/features/user/deposit.feature",
 //                "src/test/java/features/director/directorLogin.feature",
                 "src/test/java/features/director/manageId.feature",
 //                "src/test/java/features/director/profile.feature",
-                "src/test/java/features/director/zCloseBrowser.feature",
+//                "src/test/java/features/director/zCloseBrowser.feature",
         },
         glue = {
                 "com.automation.test",
@@ -22,7 +23,7 @@ import org.junit.runner.RunWith;
         }
 //        ,
 //        dryRun = true
-//        tags = ("ManageId")
+//        tags = ("@PaymentMethod")
 //        plugin = {},
 //        monochrome = true
 )

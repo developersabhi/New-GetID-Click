@@ -16,10 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class CommonMethod {
 
@@ -27,6 +24,8 @@ public class CommonMethod {
     WebDriverWait wait = new WebDriverWait(TestBase.getWebDriver(), Duration.ofMillis(PathConstants.defaultTimeout));
     private static final TestBase testbase = TestBase.getInstance();
     protected static String toasterMsgForOTP = "";
+    static protected String methodNameValue, bankNameValue, copyText, editMethodNameValue;
+
     BaseUtil baseUtil = new BaseUtil();
 
     public CommonMethod() {
@@ -89,7 +88,7 @@ public class CommonMethod {
     WebElement successfullyOtpSettingUpdateMsg;
     @FindBy(xpath = "//td/div[@class='dropdown']/div[@data-bs-toggle='dropdown']")
     WebElement editDropdownPaymentMethodBtn;
-    @FindBy(xpath = "//span[@class='current']")
+    @FindBy(xpath = "//div[@class='nice-select me-sm-2 default-select form-control wide']")
     WebElement editMethodType;
     @FindBy(xpath = "//td/div[@class='dropdown']//a[contains(text(),'Edit')]")
     WebElement editPaymentMethodBtn;
@@ -103,6 +102,41 @@ public class CommonMethod {
     WebElement editBankBtn;
     @FindBy(xpath = "//div[@class='toast toast-success' ]//div[contains(text(),'Bank account updated successfully')]")
     WebElement successfullyUpdateBankToasterMsg;
+
+    @FindBy(xpath = "//ul/li/button[@class='click-head-amount-sec']")
+    WebElement userHeadAmountBtn;
+    @FindBy(xpath = "//div[@class='cmn-walletbtn wallet-btn']/ul/li/a[@href='/wallet-deposit']")
+    WebElement userWalletDepositBtn;
+    @FindBy(xpath = "//input[@placeholder='Test Bnk']")
+    WebElement editMethodName;
+    @FindBy(xpath = "//input[@placeholder='Enter Bank Name']")
+    WebElement bankName;
+    @FindBy(xpath = "//input[@placeholder='Enter payment method name' ]")
+    WebElement methodName;
+    @FindBy(xpath = "//input[@placeholder='Enter Bank Name']")
+    WebElement editBankNameField;
+    @FindBy(xpath = "//input[@type='file']//following-sibling::span")
+    WebElement bankIconEditErrorMsg;
+    @FindBy(xpath = "//div[@id='edit_bank']/div//form/div/span")
+    WebElement bankEditErrorMsg;
+    @FindBy(xpath = "//input[@type='file']/following-sibling::span")
+    WebElement getEditPaymentIconErrorMsg;
+    @FindBy(xpath = "//input[@placeholder='Test Bnk']/following-sibling::span")
+    WebElement getEditMethodNameErrorMsg;
+    @FindBy(xpath = "//div[@class='upload-img']/button[@class='btn-close']")
+    WebElement editBankIcon;
+    @FindBy(xpath = "//div[@id='addbank']//form/div/label/following-sibling::span[contains(text(),'Bank Icon image is required')]")
+    WebElement bankIconErrorMsg;
+    @FindBy(xpath = "//div[@id='addbank']//form/div/label/following-sibling::span[contains(text(),'Please select a Country')]")
+    WebElement addCountyErrorMsg;
+    @FindBy(xpath = "(//div[@id='addbank']//form/div/label/following-sibling::span)[1]")
+    WebElement addBankErrorMsg;
+    @FindBy(xpath = "//div[@class='mb-3']/following::span[contains(text(),'Payment Icon image is required')]")
+    WebElement paymentIconErrorMsg;
+    @FindBy(xpath = "//input[@placeholder='Enter payment method name']/following-sibling::span")
+    WebElement methodNameErrorMsg;
+    @FindBy(xpath = "//span[contains(text(),'Method type is required')]")
+    WebElement methodTypeErrorMsg;
 
 
     public void clearAndType(WebElement element, String value) {
@@ -216,55 +250,68 @@ public class CommonMethod {
                     addPaymentMethodBtn.click();
                     break;
                 case "LOGOUT":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(logoutBtn);
                     logoutBtn.click();
                     break;
                 case "SUBMIT PAYMENT":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(addPaymentSubmitBtn);
                     addPaymentSubmitBtn.click();
                     break;
                 case "CANCEL PAYMENT":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(addPaymentCancelBtn);
                     addPaymentCancelBtn.click();
                     break;
                 case "METHOD TYPE":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(methodType);
                     methodType.click();
                     break;
                 case "UPI":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(methodTypeUPI);
                     methodTypeUPI.click();
                     break;
                 case "WALLET":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(methodTypeWallet);
                     methodTypeWallet.click();
                     break;
                 case "STATUS":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(statusToggleBtn);
                     statusToggleBtn.click();
                     break;
                 case "BANKS":
+                    explicitWait(PathConstants.WAIT_LOW);
                     explicitWait(PathConstants.WAIT_HIGH);
                     isElementPresent(banksBtn);
                     banksBtn.click();
                     break;
                 case "ADD BANK":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(addBankBtn);
                     addBankBtn.click();
                     break;
                 case "COUNTRY":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(countryDropDownBtn);
                     countryDropDownBtn.click();
                     break;
                 case "AUTOMATION":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(isAutomationAllowBankCheckBtn);
                     isAutomationAllowBankCheckBtn.click();
                     break;
                 case "SAVING STATEMENT IMPORT":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(isSavingStatementImportBankCheckBtn);
                     isSavingStatementImportBankCheckBtn.click();
                     break;
                 case "CURRENT STATEMENT IMPORT":
+                    explicitWait(PathConstants.WAIT_LOW);
                     isElementPresent(isCurrentStatementImportBankCheckBtn);
                     isCurrentStatementImportBankCheckBtn.click();
                     break;
@@ -315,6 +362,14 @@ public class CommonMethod {
                     editDropdownBankBtn.click();
                     isElementPresent(editBankBtn);
                     editBankBtn.click();
+                    break;
+                case "CLICK HEAD AMOUNT SEC":
+                    isElementPresent(userHeadAmountBtn);
+                    userHeadAmountBtn.click();
+                    break;
+                case "WALLET DEPOSIT":
+                    isElementPresent(userWalletDepositBtn);
+                    userWalletDepositBtn.click();
                     break;
                 default:
                     logger.error("Button not found or not implemented: " + button);
@@ -372,9 +427,17 @@ public class CommonMethod {
                     logger.info("Payment method added successfully.");
                     break;
                 case "STATUS":
-                    explicitWait(PathConstants.WAIT_VERY_LOW);
+                    explicitWait(PathConstants.WAIT_MEDIUM);
                     clickOnButton("Status");
-                    Assert.assertEquals("Error message for status not chanage",
+                    Assert.assertEquals("Error message for status not change value Status1",
+                            "Status updated successfully",
+                            baseUtil.getToasterMsg(manageIdStatusChangeToasterMsg).getText());
+                    logger.info("Payment method status change successfully.");
+                    break;
+                case "UPDATE STATUS":
+                    explicitWait(PathConstants.WAIT_MEDIUM);
+                    clickOnButton("Status");
+                    Assert.assertEquals("Error message for status not change value Status2",
                             "Status updated successfully",
                             baseUtil.getToasterMsg(manageIdStatusChangeToasterMsg).getText());
                     logger.info("Payment method status change successfully.");
@@ -394,7 +457,9 @@ public class CommonMethod {
                     logger.info("Bank account updated successfully");
                     break;
                 case "CHANGE PASSWORD":
-                    Assert.assertEquals("Error message for password not chnage", "Password changed successfully", baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
+                    Assert.assertEquals("Error message for password not change",
+                            "Password changed successfully",
+                            baseUtil.getToasterMsg(successfullyPasswordChangeMsg).getText());
                     logger.info(baseUtil.getToasterMsg(successfullyPasswordChangeMsg));
                     break;
                 case "OTP UPDATE":
@@ -410,6 +475,229 @@ public class CommonMethod {
             throw ae;  // rethrow to fail the test if assertion fails
         } catch (Exception e) {
             logger.error("Exception occurred while verifying toaster message for action: " + action, e);
+        }
+    }
+
+    public void enterValueOnTheField(String value, String field) {
+        try {
+            switch (field.toUpperCase()) {
+                case "METHOD NAME":
+                    isElementPresent(methodName);
+                    methodName.clear();
+                    methodNameValue = value + " " + generateRandomString();
+                    methodName.sendKeys(methodNameValue);
+                    break;
+                case "BANK NAME":
+                    isElementPresent(bankName);
+                    bankName.click();
+                    bankName.clear();
+                    bankNameValue = value + " " + generateRandomString();
+                    bankName.sendKeys(bankNameValue);
+                    break;
+                case "EDIT METHOD NAME":
+                    isElementPresent(editMethodName);
+                    editMethodName.clear();
+                    editMethodNameValue = value + " " + generateRandomString();
+                    editMethodName.sendKeys(editMethodNameValue);
+                    break;
+                default:
+                    logger.error("Unable to find the input field :: " + field);
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred while entering value in field: " + field, e);
+        }
+    }
+
+    public String generateRandomString() {
+        return UUID.randomUUID().toString().substring(2).replaceAll("[^A-Za-z]", "");
+    }
+
+    public void enterEditValue(String value, String field) {
+        try {
+            switch (field.toUpperCase()) {
+                case "METHOD NAME":
+                    isElementPresent(editMethodName);
+                    clearField(editMethodName);
+                    editMethodName.sendKeys(value);
+                    break;
+                case "BANK NAME":
+                    isElementPresent(editBankNameField);
+                    clearField(editBankNameField);
+                    editBankNameField.sendKeys(value);
+                    break;
+                default:
+                    logger.error("Unable to find the input field :: " + field);
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred while entering value in field: " + field, e);
+        }
+    }
+
+    public void verifyEditErrorMsg(List<Map<String, String>> list) {
+        for (Map<String, String> map : list) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String fieldName = entry.getKey();
+                String errorMsg = entry.getValue();
+
+                try {
+                    switch (fieldName.toUpperCase()) {
+                        case "METHOD NAME":
+                            Assert.assertEquals("Error message for method name not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + getEditMethodNameErrorMsg.getText(),
+                                    errorMsg, getEditMethodNameErrorMsg.getText());
+                            logger.info("Actual error msg :: " + getEditMethodNameErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+
+                        case "PAYMENT ICON":
+                            Assert.assertEquals("Error message for payment icon not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + getEditPaymentIconErrorMsg.getText(),
+                                    errorMsg, getEditPaymentIconErrorMsg.getText());
+                            logger.info("Actual error msg :: " + getEditPaymentIconErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        case "BANK NAME":
+                            Assert.assertEquals("Error message for bank name icon as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + bankEditErrorMsg.getText(),
+                                    errorMsg, bankEditErrorMsg.getText());
+                            logger.info("Actual error msg :: " + bankEditErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+//                        case "COUNTRY":
+//                            Assert.assertEquals("Error message for country not as expected. Expected :: "
+//                                            + errorMsg + " Actual :: " + countryEditErrorMsg.getText(),
+//                                    errorMsg, countryEditErrorMsg.getText());
+//                            logger.info("Actual error msg :: "+countryEditErrorMsg.getText());
+//                            logger.info("Expected error msg :: "+errorMsg );
+//                            break;
+                        case "BANK ICON":
+                            Assert.assertEquals("Error message for bank icon not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + bankIconEditErrorMsg.getText(),
+                                    errorMsg, bankIconEditErrorMsg.getText());
+                            logger.info("Actual error msg :: " + bankIconEditErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        default:
+                            System.out.println("Unknown field: " + fieldName);
+                    }
+                } catch (AssertionError | Exception e) {
+                    System.err.println("Verification failed for field: " + fieldName);
+                    System.err.println("Expected: " + errorMsg);
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void removeField(String field) {
+        try {
+            switch (field.toUpperCase()) {
+                case "EDIT METHOD NAME":
+                    if (isElementPresent(editMethodName)) {
+                        clearField(editMethodName);
+                        editMethodName.clear();
+                        explicitWait(PathConstants.WAIT_VERY_LOW);
+                        clickOnButton("Submit Payment");
+                    } else {
+                        logger.warn("Edit Method Name field not present.");
+                    }
+                    break;
+
+                case "PAYMENT ICON":
+                    if (isElementPresent(paymentIconCloseBtn)) {
+                        paymentIconCloseBtn.click();
+                        clickOnButton("Submit Payment");
+                    } else {
+                        logger.warn("Payment icon close button not present.");
+                    }
+                    break;
+
+                case "EDIT BANK NAME":
+                    if (isElementPresent(editBankNameField)) {
+                        clearField(editBankNameField);
+                        explicitWait(PathConstants.WAIT_VERY_LOW);
+                        clickOnButton("Submit Bank");
+                    } else {
+                        logger.warn("Edit Method Name field not present.");
+                    }
+                    break;
+
+                case "EDIT BANK ICON":
+                    if (isElementPresent(editBankIcon)) {
+                        editBankIcon.click();
+                        clickOnButton("Submit Bank");
+                    } else {
+                        logger.warn("Payment icon close button not present.");
+                    }
+                    break;
+
+                default:
+                    logger.info("Unable to find out the field :: " + field);
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred while trying to remove field: " + field, e);
+
+        }
+    }
+
+    public void verifyErrorMsg(List<Map<String, String>> list) {
+        for (Map<String, String> map : list) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String fieldName = entry.getKey();
+                String errorMsg = entry.getValue();
+
+                try {
+                    switch (fieldName.toUpperCase()) {
+                        case "METHOD TYPE":
+                            Assert.assertEquals("Error message for method type not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + methodTypeErrorMsg.getText(),
+                                    errorMsg, methodTypeErrorMsg.getText());
+                            logger.info("Actual error msg :: " + methodTypeErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        case "METHOD NAME":
+                            Assert.assertEquals("Error message for method name not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + methodNameErrorMsg.getText(),
+                                    errorMsg, methodNameErrorMsg.getText());
+                            logger.info("Actual error msg :: " + methodNameErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        case "PAYMENT ICON":
+                            Assert.assertEquals("Error message for payment icon not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + paymentIconErrorMsg.getText(),
+                                    errorMsg, paymentIconErrorMsg.getText());
+                            logger.info("Actual error msg :: " + paymentIconErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        case "BANK NAME":
+                            Assert.assertEquals("Error message for add bank  not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + addBankErrorMsg.getText(),
+                                    errorMsg, addBankErrorMsg.getText());
+                            logger.info("Actual error msg :: " + addBankErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        case "COUNTRY":
+                            Assert.assertEquals("Error message for add bank  not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + addCountyErrorMsg.getText(),
+                                    errorMsg, addCountyErrorMsg.getText());
+                            logger.info("Actual error msg :: " + addCountyErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        case "BANK ICON":
+                            Assert.assertEquals("Error message for add bank  not as expected. Expected :: "
+                                            + errorMsg + " Actual :: " + bankIconErrorMsg.getText(),
+                                    errorMsg, bankIconErrorMsg.getText());
+                            logger.info("Actual error msg :: " + bankIconErrorMsg.getText());
+                            logger.info("Expected error msg :: " + errorMsg);
+                            break;
+                        default:
+                            System.out.println("Unknown field: " + fieldName);
+                    }
+                } catch (AssertionError | Exception e) {
+                    logger.error("Verification failed for field: " + fieldName);
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

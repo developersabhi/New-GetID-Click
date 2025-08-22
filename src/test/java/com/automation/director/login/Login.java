@@ -28,7 +28,7 @@ public class Login {
     WebElement usernameInputField;
     @FindBy(xpath = "//input[@type='password']")
     WebElement passwordInputField;
-    @FindBy(xpath = "//input[@type ='email']/following::span[contains(text(),'Username is required')]")
+    @FindBy(xpath = "//input[@type ='email']/following::span[contains(text(),'User ID is required')]")
     WebElement usernameReqErrorMessage;
     @FindBy(xpath = "//input[@type ='password']/following::span[contains(text(),'Password is required')]")
     WebElement passwordReqErrorMessage;
@@ -42,27 +42,27 @@ public class Login {
             commonMethod.isElementPresent(usernameInputField);
             commonMethod.isElementPresent(passwordInputField);
             commonMethod.enterText(usernameInputField, username);
-            commonMethod.explicitWait(PathConstants.WAIT_LOW);
+//            commonMethod.explicitWait(PathConstants.WAIT_LOW);
             commonMethod.enterText(passwordInputField, password);
             commonMethod.explicitWait(PathConstants.WAIT_LOW);
             commonMethod.clickOnButton("Login");
-            commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
+//            commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
 
 
             switch (expectedMsg) {
-                case "Username is required & Password is required":
+                case "User ID is required & Password is required":
                     if (username.isEmpty() && password.isEmpty()) {
                         commonMethod.isElementPresent(usernameReqErrorMessage);
                         commonMethod.isElementPresent(passwordReqErrorMessage);
                         acturalUsernameMsg = usernameReqErrorMessage.getText();
                         acturalPasswordMsg = passwordReqErrorMessage.getText();
                         Assert.assertEquals("Error message for empty username is not correct",
-                                "Username is required", acturalUsernameMsg);
+                                "User ID is required", acturalUsernameMsg);
                         Assert.assertEquals("Error message for empty password is not correct",
                                 "Password is required", acturalPasswordMsg);
                     }
                     break;
-                case "Username is required":
+                case "User ID is required":
                     if (username.isEmpty()){
                         commonMethod.explicitWait(PathConstants.WAIT_MEDIUM);
                         commonMethod.isElementPresent(usernameReqErrorMessage);
@@ -92,6 +92,7 @@ public class Login {
                 case "Logged in Successfully.":
                     Assert.assertEquals("Login success message is not correct",
                             expectedMsg, baseUtil.getToasterMsg(successfulLoginToasterMessage).getText());
+                    commonMethod.explicitWait(PathConstants.WAIT_LOW);
                     commonMethod.clickOnButton("Logout");
                     break;
                 default:

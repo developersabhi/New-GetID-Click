@@ -17,6 +17,11 @@ public class CommonStepDefinition {
         TestBase.getWebDriver().get("http://getid.mango7222.com/login/dir");
     }
 
+    @Given("User on the {string} panel login page and login with valid credential.")
+    public void user_on_the_panel_login_page_and_login_with_valid_credential(String panel) {
+        testBase.login(panel);
+    }
+
     @Then("click on the {string} button.")
     public void click_on_the_button(String btn) {
        commonMethod.clickOnButton(btn);
@@ -26,13 +31,11 @@ public class CommonStepDefinition {
     public void close_the_browser() {
         commonMethod.closeBrowser();
     }
-    @Given("User log in to provider URL and is already present at the website list page.")
-    public void user_log_in_to_provider_url_and_is_already_present_at_the_website_list_page() {
-        testBase.login();
-    }
 
     @Then("Verify the {string} toaster message on screen.")
     public void verify_the_toaster_message_on_screen(String action) {
         commonMethod.verifyToasterMsg(action);
     }
+
+
 }

@@ -11,6 +11,6 @@ public class PathConstants {
     public static final int WAIT_LOW = 2000;
     public static final int WAIT_MEDIUM = 3000;
     public static final int WAIT_HIGH = 6000;
-    public static final int WAIT_FOR_TOASTER =5;
+    public static final int WAIT_FOR_TOASTER =3;
 
 }

@@ -25,6 +25,7 @@ public class ManageIdTest {
 
     @Then("enter the value {string} for the field {string}.")
     public void enter_the_value_for_the_field(String value, String field) {
+//        commonMethod.enterValueOnTheField(value, field);
         manageId.enterValueOnTheField(value, field);
     }
 
@@ -74,6 +75,7 @@ public class ManageIdTest {
         commonMethod.explicitWait(PathConstants.WAIT_LOW);
         List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
         manageId.verifyErrorMsg(data);
+//        commonMethod.verifyErrorMsg(data);
     }
 
     @Then("enter the value {string} for the field {string}")
@@ -81,20 +83,25 @@ public class ManageIdTest {
         manageId.enterMethodName(value,field);
         List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
         manageId.verifyErrorMsg(data);
+//        commonMethod.verifyErrorMsg(data);
     }
     @Then("enter the edit value {string} for the field {string}")
     public void enter_the_edit_value_for_the_field(String value, String field, DataTable dataTable) {
         manageId.enterEditMethodName(value,field);
+//        commonMethod.enterEditValue(value,field);
         List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
-        manageId.verifyErrorMsg(data);
+        manageId.verifyEditErrorMsg(data);
+//        commonMethod.verifyEditErrorMsg(data);
     }
 
     @Then("remove the {string} and Verify the error message for following field.")
     public void remove_the_and_verify_the_error_message_for_following_field(String field, DataTable dataTable) {
         manageId.removeField(field);
+//        commonMethod.removeField(field);
         commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
         List<Map<String,String>> data = dataTable.asMaps(String.class,String.class);
         manageId.verifyEditErrorMsg(data);
+//        commonMethod.verifyEditErrorMsg(data);
 //        commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
 //        commonMethod.clickOnButton("Submit Payment");
     }
