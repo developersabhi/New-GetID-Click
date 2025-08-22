@@ -1,6 +1,7 @@
 Feature: New GetID --> Profile module have Password change feature.
   Here we are verify the password change feature
 
+  @Profile
   Scenario: Scenario_1: Verify the Profile module.
 #    Given User log in to provider URL and is already present at the website list page.
     Then click on the "Profile" button.
