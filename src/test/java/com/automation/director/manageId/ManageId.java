@@ -274,10 +274,10 @@ public class ManageId {
                 case "EDIT BANK":
                     commonMethod.isElementPresent(searchTextArea);
                     searchTextArea.clear();
-                    searchTextArea.sendKeys(editMethodNameValue);
+                    searchTextArea.sendKeys(bankNameValue);
                     searchTextArea.sendKeys(Keys.ENTER);
                     commonMethod.explicitWait(PathConstants.WAIT_VERY_LOW);
-                    expected = editMethodNameValue;
+                    expected = bankNameValue;
                     actual = bankNameOnList.getText();
                     Assert.assertEquals("Bank Method Added :: ", expected, actual);
                     break;
@@ -291,6 +291,7 @@ public class ManageId {
 
         }
     }
+
 
     public void updateOTP(String value) {
         try {
